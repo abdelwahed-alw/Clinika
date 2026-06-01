@@ -1,33 +1,27 @@
 {% extends "clinic/base.html" %}
-
-{% block title %}Alarmes — Cabinet Médical{% endblock %}
-{% block page_title %}Système d'Alarmes{% endblock %}
-{% block page_subtitle %}Patients à contacter pour rappel de rendez-vous (≤ 2 jours){% endblock %}
-
+{% load i18n %}
+{% block title %}{% trans "Alarms" %} — {% trans "Medical Clinic" %}{% endblock %}
+{% block page_title %}{% trans "Alarm System" %}{% endblock %}
+{% block page_subtitle %}{% trans "Patients to contact for appointment reminders (≤ 2 days)" %}{% endblock %}
 {% block content %}
-
 {% if alarms %}
-
-<!-- Alarm Header -->
 <div class="mb-6 fade-in">
     <div class="flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-red-500 to-rose-600 rounded-2xl shadow-lg shadow-red-500/25">
         <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
             <i class="fas fa-bell text-white text-xl animate-bounce"></i>
         </div>
         <div>
-            <h3 class="text-white font-bold text-lg">{{ alarms|length }} patient{{ alarms|length|pluralize }} à contacter</h3>
-            <p class="text-red-100 text-sm">Ces patients ont un rendez-vous dans les 2 prochains jours et n'ont pas encore été contactés.</p>
+            <h3 class="text-white font-bold text-lg">
+                {% blocktrans count counter=alarms|length %}{{ counter }} patient to contact{% plural %}{{ counter }} patients to contact{% endblocktrans %}
+            </h3>
+            <p class="text-red-100 text-sm">{% trans "These patients have an appointment within the next 2 days and have not been contacted yet." %}</p>
         </div>
     </div>
 </div>
-
-<!-- Alarm Cards -->
 <div class="space-y-4">
     {% for rdv in alarms %}
     <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden hover:shadow-md transition-all duration-200 fade-in" style="animation-delay: {{ forloop.counter0 }}00ms; opacity: 0;">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between p-6 gap-4">
-
-            <!-- Patient Info -->
             <div class="flex items-center gap-4 flex-1">
                 <div class="relative">
                     <div class="w-14 h-14 bg-gradient-to-br from-red-400 to-rose-600 rounded-2xl flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-red-500/30">
@@ -53,8 +47,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Appointment Details -->
             <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <div class="text-right">
                     <div class="flex items-center gap-2">
@@ -69,41 +61,32 @@
                         </span>
                     </div>
                     <p class="text-xs text-slate-500 mt-2">
-                        <strong>Motif :</strong> {{ rdv.reason|truncatewords:15 }}
+                        <strong>{% trans "Reason:" %}</strong> {{ rdv.reason|truncatewords:15 }}
                     </p>
                 </div>
-
-                <!-- Mark as Contacted -->
                 <form method="post" action="{% url 'mark_contacted' rdv.pk %}">
                     {% csrf_token %}
-                    <button type="submit"
-                            class="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 whitespace-nowrap">
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl text-sm font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 whitespace-nowrap">
                         <i class="fas fa-check-circle"></i>
-                        Patient contacté
+                        {% trans "Mark as contacted" %}
                     </button>
                 </form>
             </div>
-
         </div>
     </div>
     {% endfor %}
 </div>
-
 {% else %}
-
-<!-- No Alarms -->
 <div class="max-w-md mx-auto text-center py-20 fade-in">
     <div class="w-24 h-24 bg-emerald-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
         <i class="fas fa-check-circle text-emerald-500 text-4xl"></i>
     </div>
-    <h3 class="text-2xl font-bold text-slate-800 mb-2">Tout est en ordre !</h3>
-    <p class="text-slate-500 font-medium">Aucune alarme en attente. Tous les patients ont été contactés.</p>
+    <h3 class="text-2xl font-bold text-slate-800 mb-2">{% trans "All clear!" %}</h3>
+    <p class="text-slate-500 font-medium">{% trans "No pending alarms. All patients have been contacted." %}</p>
     <a href="{% url 'dashboard' %}" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-teal-700 transition-all shadow-lg shadow-teal-500/25">
         <i class="fas fa-arrow-left"></i>
-        Retour au tableau de bord
+        {% trans "Back to dashboard" %}
     </a>
 </div>
-
 {% endif %}
-
 {% endblock %}

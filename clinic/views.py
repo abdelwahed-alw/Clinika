@@ -3,6 +3,7 @@ from itertools import groupby
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.db.models import Q
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -17,7 +18,7 @@ from .forms import PatientForm, AppointmentForm
 # ───────────────────────────────────────────
 
 def dashboard(request):
-    """Vue du tableau de bord principal."""
+    """Main dashboard view."""
     today = timezone.localdate()
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
@@ -41,7 +42,7 @@ def dashboard(request):
     # Prochains rendez-vous
     upcoming_appointments = Appointment.objects.filter(
         date_time__gte=timezone.now(),
-        status='Planifié',
+        status='Scheduled',
     ).select_related('patient')[:10]
 
     context = {
@@ -59,7 +60,7 @@ def dashboard(request):
 # ───────────────────────────────────────────
 
 def patient_list(request):
-    """Liste de tous les patients avec recherche."""
+    """List all patients with search."""
     query = request.GET.get('q', '')
     patients = Patient.objects.all()
 
@@ -83,49 +84,49 @@ def patient_list(request):
 
 
 def patient_create(request):
-    """Créer un nouveau patient."""
+    """Create a new patient."""
     if request.method == 'POST':
         form = PatientForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Patient ajouté avec succès !')
+            messages.success(request, _('Patient added successfully!'))
             return redirect('patient_list')
     else:
         form = PatientForm()
 
     return render(request, 'clinic/patient_form.html', {
         'form': form,
-        'title': 'Nouveau Patient',
+        'title': _('New Patient'),
     })
 
 
 def patient_edit(request, pk):
-    """Modifier un patient existant."""
+    """Edit an existing patient."""
     patient = get_object_or_404(Patient, pk=pk)
 
     if request.method == 'POST':
         form = PatientForm(request.POST, instance=patient)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Patient modifié avec succès !')
+            messages.success(request, _('Patient updated successfully!'))
             return redirect('patient_list')
     else:
         form = PatientForm(instance=patient)
 
     return render(request, 'clinic/patient_form.html', {
         'form': form,
-        'title': f'Modifier — {patient.full_name}',
+        'title': _('Edit — %(name)s') % {'name': patient.full_name},
         'patient': patient,
     })
 
 
 def patient_delete(request, pk):
-    """Supprimer un patient."""
+    """Delete a patient."""
     patient = get_object_or_404(Patient, pk=pk)
 
     if request.method == 'POST':
         patient.delete()
-        messages.success(request, 'Patient supprimé avec succès !')
+        messages.success(request, _('Patient deleted successfully!'))
         return redirect('patient_list')
 
     return render(request, 'clinic/patient_confirm_delete.html', {
@@ -138,7 +139,7 @@ def patient_delete(request, pk):
 # ───────────────────────────────────────────
 
 def appointment_list(request):
-    """Afficher les rendez-vous d'aujourd'hui et les prochains."""
+    """Display today's and upcoming appointments."""
     today = timezone.localdate()
 
     today_appointments = Appointment.objects.filter(
@@ -147,7 +148,7 @@ def appointment_list(request):
 
     upcoming_appointments = Appointment.objects.filter(
         date_time__date__gt=today,
-        status='Planifié',
+        status='Scheduled',
     ).select_related('patient')[:15]
 
     context = {
@@ -158,49 +159,49 @@ def appointment_list(request):
 
 
 def appointment_create(request):
-    """Créer un nouveau rendez-vous."""
+    """Create a new appointment."""
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Rendez-vous créé avec succès !')
+            messages.success(request, _('Appointment created successfully!'))
             return redirect('appointment_list')
     else:
         form = AppointmentForm()
 
     return render(request, 'clinic/appointment_form.html', {
         'form': form,
-        'title': 'Nouveau Rendez-vous',
+        'title': _('New Appointment'),
     })
 
 
 def appointment_edit(request, pk):
-    """Modifier un rendez-vous existant."""
+    """Edit an existing appointment."""
     appointment = get_object_or_404(Appointment, pk=pk)
 
     if request.method == 'POST':
         form = AppointmentForm(request.POST, instance=appointment)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Rendez-vous modifié avec succès !')
+            messages.success(request, _('Appointment updated successfully!'))
             return redirect('appointment_list')
     else:
         form = AppointmentForm(instance=appointment)
 
     return render(request, 'clinic/appointment_form.html', {
         'form': form,
-        'title': 'Modifier le Rendez-vous',
+        'title': _('Edit Appointment'),
         'appointment': appointment,
     })
 
 
 def appointment_delete(request, pk):
-    """Supprimer un rendez-vous."""
+    """Delete an appointment."""
     appointment = get_object_or_404(Appointment, pk=pk)
 
     if request.method == 'POST':
         appointment.delete()
-        messages.success(request, 'Rendez-vous supprimé avec succès !')
+        messages.success(request, _('Appointment deleted successfully!'))
         return redirect('appointment_list')
 
     return render(request, 'clinic/appointment_confirm_delete.html', {
@@ -213,14 +214,14 @@ def appointment_delete(request, pk):
 # ───────────────────────────────────────────
 
 def weekly_agenda(request):
-    """Vue calendrier de la semaine (7 prochains jours) optimisée."""
+    """Optimized weekly calendar view (next 7 days)."""
     today = timezone.localdate()
     end_date = today + timedelta(days=6)
     
     week_appointments = Appointment.objects.filter(
         date_time__date__gte=today,
         date_time__date__lte=end_date,
-        status='Planifié',
+        status='Scheduled',
     ).select_related('patient').order_by('date_time')
     
     appointments_by_date = {}
@@ -246,7 +247,7 @@ def weekly_agenda(request):
 # ───────────────────────────────────────────
 
 def alarm_list(request):
-    """Afficher les alarmes (patients à contacter)."""
+    """Display alarms (patients to contact)."""
     alarms = Appointment.objects.get_pending_alarms()
 
     return render(request, 'clinic/alarm_list.html', {
@@ -256,15 +257,17 @@ def alarm_list(request):
 
 @require_POST
 def mark_contacted(request, pk):
-    """Marquer un rendez-vous comme 'patient contacté'."""
+    """Mark an appointment as 'patient contacted'."""
     appointment = get_object_or_404(Appointment, pk=pk)
 
     if request.method == 'POST':
         appointment.contacted_for_reminder = True
         appointment.save()
-        messages.success(
-            request,
-            f'{appointment.patient.full_name} a été marqué comme contacté.',
-        )
+    messages.success(
+        request,
+        _('%(name)s has been marked as contacted.') % {
+            'name': appointment.patient.full_name,
+        },
+    )
 
     return redirect('alarm_list')

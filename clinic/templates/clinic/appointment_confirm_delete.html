@@ -1,11 +1,9 @@
 {% extends "clinic/base.html" %}
-
-{% block title %}Supprimer le RDV — Cabinet Médical{% endblock %}
-{% block page_title %}Supprimer le rendez-vous{% endblock %}
-{% block page_subtitle %}Confirmer la suppression{% endblock %}
-
+{% load i18n %}
+{% block title %}{% trans "Delete Appointment" %} — {% trans "Medical Clinic" %}{% endblock %}
+{% block page_title %}{% trans "Delete Appointment" %}{% endblock %}
+{% block page_subtitle %}{% trans "Confirm deletion" %}{% endblock %}
 {% block content %}
-
 <div class="max-w-lg mx-auto fade-in">
     <div class="bg-white rounded-2xl border border-red-200 shadow-sm overflow-hidden">
         <div class="px-6 py-5 bg-red-50 border-b border-red-100">
@@ -14,31 +12,27 @@
                     <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-bold text-red-800">Confirmer la suppression</h3>
-                    <p class="text-sm text-red-600">Cette action est irréversible</p>
+                    <h3 class="text-lg font-bold text-red-800">{% trans "Confirm deletion" %}</h3>
+                    <p class="text-sm text-red-600">{% trans "This action is irreversible" %}</p>
                 </div>
             </div>
         </div>
         <div class="p-6">
             <p class="text-slate-700">
-                Êtes-vous sûr de vouloir supprimer le rendez-vous de
+                {% trans "Are you sure you want to delete the appointment for" %}
                 <strong class="text-slate-900">{{ appointment.patient.full_name }}</strong>
-                prévu le <strong>{{ appointment.date_time|date:"d/m/Y à H:i" }}</strong> ?
+                {% trans "on" %} <strong>{{ appointment.date_time|date:"d/m/Y" }} {% trans "at" %} {{ appointment.date_time|time:"H:i" }}</strong> ?
             </p>
-
             <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-slate-100">
-                <a href="{% url 'appointment_list' %}" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-sm font-semibold hover:bg-slate-200 transition-all">
-                    Annuler
-                </a>
+                <a href="{% url 'appointment_list' %}" class="px-6 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-sm font-semibold hover:bg-slate-200 transition-all">{% trans "Cancel" %}</a>
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl text-sm font-semibold hover:from-red-600 hover:to-red-700 transition-all shadow-lg shadow-red-500/25">
-                        <i class="fas fa-trash mr-2"></i>Supprimer
+                        <i class="fas fa-trash mr-2"></i>{% trans "Delete" %}
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

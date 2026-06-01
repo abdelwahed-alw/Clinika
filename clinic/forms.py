@@ -1,9 +1,10 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from .models import Patient, Appointment
 
 
 class PatientForm(forms.ModelForm):
-    """Formulaire de création/modification d'un patient."""
+    """Form for creating/editing a patient."""
 
     class Meta:
         model = Patient
@@ -17,13 +18,13 @@ class PatientForm(forms.ModelForm):
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white',
-                'placeholder': 'Prénom du patient',
+                'placeholder': _('Patient first name'),
             }),
             'last_name': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white',
-                'placeholder': 'Nom du patient',
+                'placeholder': _('Patient last name'),
             }),
             'date_of_birth': forms.DateInput(attrs={
                 'type': 'date',
@@ -35,7 +36,7 @@ class PatientForm(forms.ModelForm):
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white',
-                'placeholder': 'Numéro CIN',
+                'placeholder': _('CIN number'),
             }),
             'phone': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
@@ -54,13 +55,13 @@ class PatientForm(forms.ModelForm):
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white resize-none',
-                'placeholder': 'Adresse complète',
+                'placeholder': _('Full address'),
             }),
             'city': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white',
-                'placeholder': 'Ville',
+                'placeholder': _('City'),
             }),
             'blood_group': forms.Select(attrs={
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
@@ -72,20 +73,20 @@ class PatientForm(forms.ModelForm):
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white resize-none',
-                'placeholder': 'Liste des allergies connues...',
+                'placeholder': _('List of known allergies...'),
             }),
             'chronic_diseases': forms.Textarea(attrs={
                 'rows': 3,
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white resize-none',
-                'placeholder': 'Liste des maladies chroniques...',
+                'placeholder': _('List of chronic diseases...'),
             }),
         }
 
 
 class AppointmentForm(forms.ModelForm):
-    """Formulaire de création/modification d'un rendez-vous."""
+    """Form for creating/editing an appointment."""
 
     class Meta:
         model = Appointment
@@ -112,7 +113,7 @@ class AppointmentForm(forms.ModelForm):
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '
                          'focus:border-teal-500 focus:ring-2 focus:ring-teal-200 '
                          'transition-all duration-200 bg-white resize-none',
-                'placeholder': 'Motif du rendez-vous...',
+                'placeholder': _('Reason for appointment...'),
             }),
             'status': forms.Select(attrs={
                 'class': 'w-full px-4 py-2.5 rounded-lg border border-slate-300 '

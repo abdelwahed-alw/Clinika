@@ -28,7 +28,7 @@ class AlarmLogicTest(TestCase):
             date_time=self.now + timedelta(hours=2),
             type="Consultation",
             reason="Aujourd'hui",
-            status="Planifié",
+            status="Scheduled",
             contacted_for_reminder=False
         )
 
@@ -38,7 +38,7 @@ class AlarmLogicTest(TestCase):
             date_time=self.now + timedelta(days=2),
             type="Consultation",
             reason="Dans 2 jours",
-            status="Planifié",
+            status="Scheduled",
             contacted_for_reminder=False
         )
 
@@ -48,7 +48,7 @@ class AlarmLogicTest(TestCase):
             date_time=self.now + timedelta(days=5),
             type="Consultation",
             reason="Dans 5 jours",
-            status="Planifié",
+            status="Scheduled",
             contacted_for_reminder=False
         )
         
@@ -58,7 +58,7 @@ class AlarmLogicTest(TestCase):
             date_time=self.now - timedelta(days=1),
             type="Consultation",
             reason="Passé",
-            status="Planifié",
+            status="Scheduled",
             contacted_for_reminder=False
         )
 
@@ -68,7 +68,7 @@ class AlarmLogicTest(TestCase):
             date_time=self.now + timedelta(days=1),
             type="Consultation",
             reason="Déjà contacté",
-            status="Planifié",
+            status="Scheduled",
             contacted_for_reminder=True
         )
 
@@ -99,10 +99,10 @@ class AlarmLogicTest(TestCase):
         rdv_double = Appointment(
             patient=self.patient,
             date_time=dt,
-            type="Bilan",
+            type="Check-up",
             reason="Double RDV"
         )
         
         from django.core.exceptions import ValidationError
-        with self.assertRaisesMessage(ValidationError, "Un rendez-vous est déjà planifié à cette date et heure exactes."):
+        with self.assertRaisesMessage(ValidationError, "An appointment is already scheduled at this exact date and time."):
             rdv_double.clean()

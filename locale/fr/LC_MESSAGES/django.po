@@ -1,0 +1,412 @@
+# French translations for Clinika Medical Clinic
+# Copyright (C) 2026
+# This file is distributed under the same license as the Clinika package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Clinika 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-01 18:00+0100\n"
+"PO-Revision-Date: 2026-06-01 18:00+0100\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# ── Settings ──
+msgid "English"
+msgstr "Anglais"
+
+msgid "French"
+msgstr "Français"
+
+# ── Base template / Navigation ──
+msgid "Medical Clinic — Complete management of your medical practice"
+msgstr "Cabinet Médical — Gestion complète de votre cabinet médical"
+
+msgid "Medical Clinic"
+msgstr "Cabinet Médical"
+
+msgid "Management System"
+msgstr "Système de Gestion"
+
+msgid "Main"
+msgstr "Principal"
+
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+msgid "Patients"
+msgstr "Patients"
+
+msgid "Scheduling"
+msgstr "Planification"
+
+msgid "Appointments"
+msgstr "Rendez-vous"
+
+msgid "Weekly Agenda"
+msgstr "Agenda Hebdomadaire"
+
+msgid "System"
+msgstr "Système"
+
+msgid "Alarms"
+msgstr "Alarmes"
+
+msgid "Dr. Doctor"
+msgstr "Dr. Médecin"
+
+msgid "General Practice"
+msgstr "Médecine Générale"
+
+msgid "Welcome to your management space"
+msgstr "Bienvenue dans votre espace de gestion"
+
+msgid "New Patient"
+msgstr "Nouveau Patient"
+
+msgid "New Appointment"
+msgstr "Nouveau Rendez-vous"
+
+# ── Dashboard ──
+msgid "Overview of your medical practice"
+msgstr "Vue d'ensemble de votre cabinet médical"
+
+#, python-format
+msgid "%(counter)s alarm active!"
+msgid_plural "%(counter)s alarms active!"
+msgstr[0] "%(counter)s alarme active !"
+msgstr[1] "%(counter)s alarmes actives !"
+
+msgid "Patients need to be contacted for appointment reminders."
+msgstr "Des patients doivent être contactés pour des rappels de rendez-vous."
+
+msgid "View alarms"
+msgstr "Voir les alarmes"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "New patients"
+msgstr "Nouveaux patients"
+
+msgid "Week"
+msgstr "Semaine"
+
+msgid "Appts this week"
+msgstr "RDV cette semaine"
+
+msgid "Urgent"
+msgstr "Urgent"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Pending alarms"
+msgstr "Alarmes en attente"
+
+msgid "Upcoming Appointments"
+msgstr "Prochains Rendez-vous"
+
+msgid "View all"
+msgstr "Voir tout"
+
+msgid "Patient"
+msgstr "Patient"
+
+msgid "Date & Time"
+msgstr "Date et Heure"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Reason"
+msgstr "Motif"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "at"
+msgstr "à"
+
+msgid "No upcoming appointments"
+msgstr "Aucun rendez-vous à venir"
+
+msgid "Schedule an appointment"
+msgstr "Planifier un rendez-vous"
+
+# ── Patient list ──
+msgid "Patient List"
+msgstr "Liste des Patients"
+
+msgid "Manage your patient database"
+msgstr "Gérez votre base de données patients"
+
+msgid "Search by name, CIN or phone..."
+msgstr "Rechercher par nom, CIN ou téléphone..."
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Full Name"
+msgstr "Nom Complet"
+
+msgid "Age"
+msgstr "Âge"
+
+msgid "Phone"
+msgstr "Téléphone"
+
+msgid "Blood Group"
+msgstr "Groupe Sanguin"
+
+msgid "City"
+msgstr "Ville"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "yrs"
+msgstr "ans"
+
+msgid "Edit"
+msgstr "Modifier"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+#, python-format
+msgid "Page %(current)s of %(total)s"
+msgstr "Page %(current)s sur %(total)s"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Next"
+msgstr "Suivant"
+
+#, python-format
+msgid "No patients found for \"%(query)s\""
+msgstr "Aucun patient trouvé pour « %(query)s »"
+
+msgid "Clear search"
+msgstr "Effacer la recherche"
+
+msgid "No patients registered"
+msgstr "Aucun patient enregistré"
+
+msgid "Add a patient"
+msgstr "Ajouter un patient"
+
+# ── Patient form ──
+msgid "Fill in the patient information"
+msgstr "Remplissez les informations du patient"
+
+msgid "Personal Information"
+msgstr "Informations Personnelles"
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "Last name"
+msgstr "Nom"
+
+msgid "Date of birth"
+msgstr "Date de naissance"
+
+msgid "CIN"
+msgstr "CIN"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Blood group"
+msgstr "Groupe sanguin"
+
+msgid "Medical Information"
+msgstr "Informations Médicales"
+
+msgid "Allergies"
+msgstr "Allergies"
+
+msgid "Chronic diseases"
+msgstr "Maladies chroniques"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Save Patient"
+msgstr "Enregistrer le Patient"
+
+# ── Patient delete ──
+msgid "Delete Patient"
+msgstr "Supprimer le Patient"
+
+msgid "Confirm deletion"
+msgstr "Confirmer la suppression"
+
+msgid "This action is irreversible"
+msgstr "Cette action est irréversible"
+
+msgid "Are you sure you want to delete patient"
+msgstr "Êtes-vous sûr de vouloir supprimer le patient"
+
+msgid "All associated appointments will also be deleted."
+msgstr "Tous les rendez-vous associés seront également supprimés."
+
+# ── Appointment list ──
+msgid "Today's consultations and upcoming appointments"
+msgstr "Consultations du jour et rendez-vous à venir"
+
+#, python-format
+msgid "%(counter)s appointment"
+msgid_plural "%(counter)s appointments"
+msgstr[0] "%(counter)s rendez-vous"
+msgstr[1] "%(counter)s rendez-vous"
+
+msgid "Scheduled"
+msgstr "Planifié"
+
+msgid "Completed"
+msgstr "Terminé"
+
+msgid "Cancelled"
+msgstr "Annulé"
+
+msgid "No appointments today"
+msgstr "Aucun rendez-vous aujourd'hui"
+
+msgid "Upcoming"
+msgstr "À venir"
+
+#, python-format
+msgid "%(counter)s upcoming appointment"
+msgid_plural "%(counter)s upcoming appointments"
+msgstr[0] "%(counter)s rendez-vous à venir"
+msgstr[1] "%(counter)s rendez-vous à venir"
+
+# ── Appointment form ──
+msgid "Schedule an appointment for a patient"
+msgstr "Planifier un rendez-vous pour un patient"
+
+msgid "Appointment Details"
+msgstr "Détails du Rendez-vous"
+
+msgid "Date and time"
+msgstr "Date et heure"
+
+msgid "Save Appointment"
+msgstr "Enregistrer le Rendez-vous"
+
+#, python-format
+msgid "Edit — %(name)s"
+msgstr "Modifier — %(name)s"
+
+msgid "Edit Appointment"
+msgstr "Modifier le Rendez-vous"
+
+# ── Appointment delete ──
+msgid "Delete Appointment"
+msgstr "Supprimer le Rendez-vous"
+
+msgid "Are you sure you want to delete the appointment for"
+msgstr "Êtes-vous sûr de vouloir supprimer le rendez-vous de"
+
+msgid "on"
+msgstr "le"
+
+# ── Alarm list ──
+msgid "Alarm System"
+msgstr "Système d'Alarmes"
+
+msgid "Patients to contact for appointment reminders (≤ 2 days)"
+msgstr "Patients à contacter pour rappel de rendez-vous (≤ 2 jours)"
+
+#, python-format
+msgid "%(counter)s patient to contact"
+msgid_plural "%(counter)s patients to contact"
+msgstr[0] "%(counter)s patient à contacter"
+msgstr[1] "%(counter)s patients à contacter"
+
+msgid "These patients have an appointment within the next 2 days and have not been contacted yet."
+msgstr "Ces patients ont un rendez-vous dans les 2 prochains jours et n'ont pas encore été contactés."
+
+msgid "Reason:"
+msgstr "Motif :"
+
+msgid "Mark as contacted"
+msgstr "Marquer comme contacté"
+
+msgid "All clear!"
+msgstr "Tout est en ordre !"
+
+msgid "No pending alarms. All patients have been contacted."
+msgstr "Aucune alarme en attente. Tous les patients ont été contactés."
+
+msgid "Back to dashboard"
+msgstr "Retour au tableau de bord"
+
+# ── Weekly agenda ──
+msgid "7-day calendar view"
+msgstr "Vue calendrier sur 7 jours"
+
+msgid "No Appts"
+msgstr "Aucun RDV"
+
+#, python-format
+msgid "%(counter)s appt"
+msgid_plural "%(counter)s appts"
+msgstr[0] "%(counter)s RDV"
+msgstr[1] "%(counter)s RDV"
+
+# ── Flash messages (views.py) ──
+msgid "Patient added successfully!"
+msgstr "Patient ajouté avec succès !"
+
+msgid "Patient updated successfully!"
+msgstr "Patient mis à jour avec succès !"
+
+msgid "Patient deleted successfully!"
+msgstr "Patient supprimé avec succès !"
+
+msgid "Appointment created successfully!"
+msgstr "Rendez-vous créé avec succès !"
+
+msgid "Appointment updated successfully!"
+msgstr "Rendez-vous mis à jour avec succès !"
+
+msgid "Appointment deleted successfully!"
+msgstr "Rendez-vous supprimé avec succès !"
+
+#, python-format
+msgid "%(name)s has been marked as contacted."
+msgstr "%(name)s a été marqué comme contacté."
+
+# ── Form placeholders (forms.py) ──
+msgid "Patient first name"
+msgstr "Prénom du patient"
+
+msgid "Patient last name"
+msgstr "Nom du patient"
+
+msgid "CIN number"
+msgstr "Numéro CIN"
+
+msgid "Full address"
+msgstr "Adresse complète"
+
+msgid "List of known allergies..."
+msgstr "Liste des allergies connues..."
+
+msgid "List of chronic diseases..."
+msgstr "Liste des maladies chroniques..."
+
+msgid "Reason for appointment..."
+msgstr "Motif du rendez-vous..."

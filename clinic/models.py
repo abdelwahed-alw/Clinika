@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 class Patient(models.Model):
-    """Modèle représentant un patient du cabinet médical."""
+    """Model representing a patient in the medical practice."""
 
     BLOOD_GROUP_CHOICES = [
         ('A+', 'A+'),
@@ -17,24 +17,24 @@ class Patient(models.Model):
         ('O-', 'O-'),
     ]
 
-    first_name = models.CharField("Prénom", max_length=100)
-    last_name = models.CharField("Nom", max_length=100)
-    date_of_birth = models.DateField("Date de naissance")
+    first_name = models.CharField("First name", max_length=100)
+    last_name = models.CharField("Last name", max_length=100)
+    date_of_birth = models.DateField("Date of birth")
     cin = models.CharField("CIN", max_length=20, blank=True, null=True)
-    phone = models.CharField("Téléphone", max_length=20)
+    phone = models.CharField("Phone", max_length=20)
     email = models.EmailField("Email", blank=True, null=True)
-    address = models.TextField("Adresse", blank=True, null=True)
-    city = models.CharField("Ville", max_length=100, blank=True, null=True)
+    address = models.TextField("Address", blank=True, null=True)
+    city = models.CharField("City", max_length=100, blank=True, null=True)
     blood_group = models.CharField(
-        "Groupe sanguin",
+        "Blood group",
         max_length=5,
         choices=BLOOD_GROUP_CHOICES,
         blank=True,
         null=True,
     )
     allergies = models.TextField("Allergies", blank=True)
-    chronic_diseases = models.TextField("Maladies chroniques", blank=True)
-    created_at = models.DateTimeField("Date de création", auto_now_add=True)
+    chronic_diseases = models.TextField("Chronic diseases", blank=True)
+    created_at = models.DateTimeField("Created at", auto_now_add=True)
 
     class Meta:
         verbose_name = "Patient"
@@ -50,7 +50,7 @@ class Patient(models.Model):
 
     @property
     def age(self):
-        """Calculer l'âge du patient à partir de sa date de naissance."""
+        """Calculate the patient's age from their date of birth."""
         today = timezone.localdate()
         return (
             today.year
@@ -63,7 +63,7 @@ class Patient(models.Model):
 
 class AppointmentManager(models.Manager):
     def get_pending_alarms(self):
-        """Récupérer les rendez-vous nécessitant un rappel (≤ 2 jours, futur strict, non contacté)."""
+        """Get appointments requiring a reminder (≤ 2 days, strictly future, not contacted)."""
         now = timezone.now()
         limit_date = timezone.localdate() + timezone.timedelta(days=2)
         
@@ -71,25 +71,25 @@ class AppointmentManager(models.Manager):
             date_time__gte=now,
             date_time__date__lte=limit_date,
             contacted_for_reminder=False,
-            status='Planifié',
+            status='Scheduled',
         ).select_related('patient')
 
 
 class Appointment(models.Model):
-    """Modèle représentant un rendez-vous médical."""
+    """Model representing a medical appointment."""
 
     TYPE_CHOICES = [
         ('Consultation', 'Consultation'),
-        ('Bilan', 'Bilan'),
-        ('Contrôle', 'Contrôle'),
-        ('Urgence', 'Urgence'),
-        ('Suivi', 'Suivi'),
+        ('Check-up', 'Check-up'),
+        ('Control', 'Control'),
+        ('Emergency', 'Emergency'),
+        ('Follow-up', 'Follow-up'),
     ]
 
     STATUS_CHOICES = [
-        ('Planifié', 'Planifié'),
-        ('Annulé', 'Annulé'),
-        ('Terminé', 'Terminé'),
+        ('Scheduled', 'Scheduled'),
+        ('Cancelled', 'Cancelled'),
+        ('Completed', 'Completed'),
     ]
 
     objects = AppointmentManager()
@@ -100,28 +100,28 @@ class Appointment(models.Model):
         related_name='appointments',
         verbose_name="Patient",
     )
-    date_time = models.DateTimeField("Date et heure")
+    date_time = models.DateTimeField("Date and time")
     type = models.CharField(
-        "Type de rendez-vous",
+        "Appointment type",
         max_length=20,
         choices=TYPE_CHOICES,
         default='Consultation',
     )
-    reason = models.TextField("Motif")
+    reason = models.TextField("Reason")
     status = models.CharField(
-        "Statut",
+        "Status",
         max_length=20,
         choices=STATUS_CHOICES,
-        default='Planifié',
+        default='Scheduled',
     )
     contacted_for_reminder = models.BooleanField(
-        "Contacté pour rappel",
+        "Contacted for reminder",
         default=False,
     )
 
     class Meta:
-        verbose_name = "Rendez-vous"
-        verbose_name_plural = "Rendez-vous"
+        verbose_name = "Appointment"
+        verbose_name_plural = "Appointments"
         ordering = ['date_time']
 
     def clean(self):
@@ -134,12 +134,12 @@ class Appointment(models.Model):
             
             if overlapping.exists():
                 raise ValidationError({
-                    'date_time': "Un rendez-vous est déjà planifié à cette date et heure exactes."
+                    'date_time': "An appointment is already scheduled at this exact date and time."
                 })
 
     def __str__(self):
         local_dt = timezone.localtime(self.date_time)
         return (
-            f"RDV - {self.patient.full_name} "
-            f"le {local_dt.strftime('%d/%m/%Y à %H:%M')}"
+            f"Appt - {self.patient.full_name} "
+            f"on {local_dt.strftime('%d/%m/%Y at %H:%M')}"
         )

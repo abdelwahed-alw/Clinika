@@ -1,11 +1,11 @@
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="{{ LANGUAGE_CODE }}" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cabinet Médical — Gestion complète de votre cabinet médical">
-    <title>{% block title %}Cabinet Médical{% endblock %}</title>
+    <meta name="description" content="{% trans 'Medical Clinic — Complete management of your medical practice' %}">
+    <title>{% block title %}{% trans "Medical Clinic" %}{% endblock %}</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -94,6 +94,14 @@
         .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
         .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
         .fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+        /* Language switcher */
+        .lang-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body class="h-full bg-slate-50">
@@ -112,8 +120,8 @@
                         <i class="fas fa-heartbeat text-white text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold tracking-tight">Cabinet Médical</h1>
-                        <p class="text-xs text-slate-400 font-medium">Système de Gestion</p>
+                        <h1 class="text-lg font-bold tracking-tight">{% trans "Medical Clinic" %}</h1>
+                        <p class="text-xs text-slate-400 font-medium">{% trans "Management System" %}</p>
                     </div>
                 </div>
             </div>
@@ -121,42 +129,42 @@
             <!-- Navigation -->
             <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
 
-                <p class="px-3 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Principal</p>
+                <p class="px-3 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">{% trans "Main" %}</p>
 
                 <a href="{% url 'dashboard' %}"
                    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                     <i class="fas fa-th-large w-5 text-center"></i>
-                    Tableau de bord
+                    {% trans "Dashboard" %}
                 </a>
 
                 <a href="{% url 'patient_list' %}"
                    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if 'patient' in request.resolver_match.url_name %}active{% endif %}">
                     <i class="fas fa-users w-5 text-center"></i>
-                    Patients
+                    {% trans "Patients" %}
                 </a>
 
-                <p class="px-3 mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Planification</p>
+                <p class="px-3 mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">{% trans "Scheduling" %}</p>
 
                 <a href="{% url 'appointment_list' %}"
                    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if 'appointment' in request.resolver_match.url_name %}active{% endif %}">
                     <i class="fas fa-calendar-check w-5 text-center"></i>
-                    Rendez-vous
+                    {% trans "Appointments" %}
                 </a>
 
                 <a href="{% url 'weekly_agenda' %}"
                    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if request.resolver_match.url_name == 'weekly_agenda' %}active{% endif %}">
                     <i class="fas fa-calendar-week w-5 text-center"></i>
-                    Agenda Semaine
+                    {% trans "Weekly Agenda" %}
                 </a>
 
-                <p class="px-3 mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Système</p>
+                <p class="px-3 mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">{% trans "System" %}</p>
 
                 <a href="{% url 'alarm_list' %}"
                    class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if 'alarm' in request.resolver_match.url_name %}active{% endif %}">
                     <div class="relative">
                         <i class="fas fa-bell w-5 text-center"></i>
                     </div>
-                    Alarmes
+                    {% trans "Alarms" %}
                 </a>
 
             </nav>
@@ -168,8 +176,8 @@
                         <i class="fas fa-user-md text-slate-300 text-sm"></i>
                     </div>
                     <div>
-                        <p class="text-sm font-semibold text-slate-200">Dr. Médecin</p>
-                        <p class="text-[11px] text-slate-500">Médecine Générale</p>
+                        <p class="text-sm font-semibold text-slate-200">{% trans "Dr. Doctor" %}</p>
+                        <p class="text-[11px] text-slate-500">{% trans "General Practice" %}</p>
                     </div>
                 </div>
             </div>
@@ -184,17 +192,37 @@
             <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60">
                 <div class="flex items-center justify-between px-8 py-4">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-800">{% block page_title %}Tableau de bord{% endblock %}</h2>
-                        <p class="text-sm text-slate-500 mt-0.5">{% block page_subtitle %}Bienvenue dans votre espace de gestion{% endblock %}</p>
+                        <h2 class="text-xl font-bold text-slate-800">{% block page_title %}{% trans "Dashboard" %}{% endblock %}</h2>
+                        <p class="text-sm text-slate-500 mt-0.5">{% block page_subtitle %}{% trans "Welcome to your management space" %}{% endblock %}</p>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-3">
+                        <!-- Language Switcher -->
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            {% if CURRENT_LANGUAGE == 'fr' %}
+                            <button type="submit" name="language" value="en"
+                                    class="lang-btn inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 rounded-xl text-sm font-bold shadow-sm border border-slate-200/60"
+                                    title="Switch to English">
+                                <span class="text-base">🇬🇧</span> EN
+                            </button>
+                            {% else %}
+                            <button type="submit" name="language" value="fr"
+                                    class="lang-btn inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-slate-100 to-slate-200 hover:from-slate-200 hover:to-slate-300 text-slate-700 rounded-xl text-sm font-bold shadow-sm border border-slate-200/60"
+                                    title="Passer en Français">
+                                <span class="text-base">🇫🇷</span> FR
+                            </button>
+                            {% endif %}
+                        </form>
+
                         <a href="{% url 'patient_create' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40">
                             <i class="fas fa-plus text-xs"></i>
-                            Nouveau Patient
+                            {% trans "New Patient" %}
                         </a>
                         <a href="{% url 'appointment_create' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-medical-500 to-medical-600 text-white rounded-xl text-sm font-semibold hover:from-medical-600 hover:to-medical-700 transition-all duration-200 shadow-lg shadow-medical-500/25 hover:shadow-medical-500/40">
                             <i class="fas fa-calendar-plus text-xs"></i>
-                            Nouveau RDV
+                            {% trans "New Appointment" %}
                         </a>
                     </div>
                 </div>

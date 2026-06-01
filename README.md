@@ -1,23 +1,23 @@
-# Gestion Cabinet Médical
+# Medical Clinic Management
 
-Application Django de gestion d'un cabinet médical — patients, rendez-vous, agenda hebdomadaire et rappels automatiques.
+Django application for managing a medical clinic — patients, appointments, weekly agenda, and automatic reminders.
 
-## Fonctionnalités
+## Features
 
-- **Gestion des patients** — Ajout, modification, suppression et recherche (nom, CIN, téléphone). Fiche médicale complète : groupe sanguin, allergies, maladies chroniques.
-- **Planification des rendez-vous** — Création, modification et annulation avec classification (Consultation, Bilan, Contrôle, Urgence, Suivi). Prévention des doubles réservations.
-- **Tableau de bord** — Statistiques en un coup d'œil : nouveaux patients du jour, rendez-vous du jour/de la semaine, rappels en attente.
-- **Agenda hebdomadaire** — Vue calendrier sur 7 jours avec l'ensemble des rendez-vous planifiés.
-- **Système de rappels intelligent** — Détection automatique des rendez-vous dans les 48h sans relance, avec action "Marquer comme contacté" en un clic.
+- **Patient Management** — Add, edit, delete and search (name, CIN, phone). Complete medical record: blood group, allergies, chronic diseases.
+- **Appointment Scheduling** — Create, modify and cancel with classification (Consultation, Check-up, Control, Emergency, Follow-up). Double-booking prevention.
+- **Dashboard** — At-a-glance statistics: new patients today, today's/week's appointments, pending reminders.
+- **Weekly Agenda** — 7-day calendar view with all scheduled appointments.
+- **Smart Reminder System** — Automatic detection of appointments within 48h without follow-up, with one-click "Mark as contacted" action.
 
-## Stack technique
+## Tech Stack
 
 - Python 3.14 / Django 6.0
 - SQLite
 - Tailwind CSS (CDN)
 - Font Awesome 6
 
-## Démarrage rapide
+## Quick Start
 
 ```bash
 git clone <repo-url>
@@ -28,29 +28,29 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Données de démonstration
+### Demo Data
 
 ```bash
 python seed_data.py
 ```
 
-### Lancer les tests
+### Run Tests
 
 ```bash
 python manage.py test
 ```
 
-## Structure du projet
+## Project Structure
 
 ```
-cabinet_medical/            # Configuration Django (settings, urls, wsgi, asgi)
-clinic/                     # Application principale
-├── models.py               # Modèles Patient & Appointment
-├── views.py                # Vues CRUD, dashboard, agenda, alarmes
-├── forms.py                # ModelForms pour Patient & Appointment
-├── admin.py                # Configuration de l'interface d'administration
-├── urls.py                 # Définition des routes
-├── tests.py                # Tests unitaires
-└── templates/clinic/       # Templates HTML (Tailwind CSS)
-seed_data.py                # Script de génération de données fictives
+cabinet_medical/            # Django configuration (settings, urls, wsgi, asgi)
+clinic/                     # Main application
+├── models.py               # Patient & Appointment models
+├── views.py                # CRUD views, dashboard, agenda, alarms
+├── forms.py                # ModelForms for Patient & Appointment
+├── admin.py                # Admin interface configuration
+├── urls.py                 # Route definitions
+├── tests.py                # Unit tests
+└── templates/clinic/       # HTML templates (Tailwind CSS)
+seed_data.py                # Demo data generation script
 ```

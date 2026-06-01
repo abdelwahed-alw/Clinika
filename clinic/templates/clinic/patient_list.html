@@ -1,8 +1,9 @@
 {% extends "clinic/base.html" %}
+{% load i18n %}
 
-{% block title %}Patients — Cabinet Médical{% endblock %}
-{% block page_title %}Liste des Patients{% endblock %}
-{% block page_subtitle %}Gérez votre base de données patients{% endblock %}
+{% block title %}{% trans "Patients" %} — {% trans "Medical Clinic" %}{% endblock %}
+{% block page_title %}{% trans "Patient List" %}{% endblock %}
+{% block page_subtitle %}{% trans "Manage your patient database" %}{% endblock %}
 
 {% block content %}
 
@@ -12,13 +13,13 @@
         <div class="relative">
             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
             <input type="text" name="q" value="{{ query }}"
-                   placeholder="Rechercher par nom, prénom, CIN ou téléphone..."
+                   placeholder="{% trans 'Search by name, CIN or phone...' %}"
                    class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 shadow-sm">
         </div>
     </form>
     <a href="{% url 'patient_create' %}" class="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-lg shadow-teal-500/25">
         <i class="fas fa-plus text-xs"></i>
-        Nouveau Patient
+        {% trans "New Patient" %}
     </a>
 </div>
 
@@ -29,13 +30,13 @@
         <table class="w-full">
             <thead>
                 <tr class="bg-slate-50/80 border-b border-slate-100">
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nom Complet</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Âge</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Téléphone</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Groupe Sanguin</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Ville</th>
-                    <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "ID" %}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "Full Name" %}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "Age" %}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "Phone" %}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "Blood Group" %}</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "City" %}</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-50">
@@ -56,7 +57,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="text-sm font-medium text-slate-700">{{ patient.age }} ans</span>
+                        <span class="text-sm font-medium text-slate-700">{{ patient.age }} {% trans "yrs" %}</span>
                     </td>
                     <td class="px-6 py-4">
                         <span class="text-sm text-slate-600">
@@ -78,12 +79,12 @@
                         <div class="flex items-center justify-center gap-2">
                             <a href="{% url 'patient_edit' patient.pk %}"
                                class="w-9 h-9 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center transition-colors duration-200"
-                               title="Modifier">
+                                title="{% trans 'Edit' %}">
                                 <i class="fas fa-pen text-xs"></i>
                             </a>
                             <a href="{% url 'patient_delete' patient.pk %}"
                                class="w-9 h-9 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center transition-colors duration-200"
-                               title="Supprimer">
+                                title="{% trans 'Delete' %}">
                                 <i class="fas fa-trash text-xs"></i>
                             </a>
                         </div>
@@ -98,19 +99,19 @@
     {% if page_obj.has_other_pages %}
     <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50">
         <p class="text-sm text-slate-500">
-            Page <span class="font-medium text-slate-800">{{ page_obj.number }}</span> sur <span class="font-medium text-slate-800">{{ page_obj.paginator.num_pages }}</span>
+            {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
         </p>
         <div class="flex gap-2">
             {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors">Précédent</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors">{% trans "Previous" %}</a>
             {% else %}
-            <span class="px-3 py-1.5 rounded-lg border border-slate-100 bg-slate-50 text-slate-400 text-sm font-medium cursor-not-allowed">Précédent</span>
+            <span class="px-3 py-1.5 rounded-lg border border-slate-100 bg-slate-50 text-slate-400 text-sm font-medium cursor-not-allowed">{% trans "Previous" %}</span>
             {% endif %}
             
             {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors">Suivant</a>
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors">{% trans "Next" %}</a>
             {% else %}
-            <span class="px-3 py-1.5 rounded-lg border border-slate-100 bg-slate-50 text-slate-400 text-sm font-medium cursor-not-allowed">Suivant</span>
+            <span class="px-3 py-1.5 rounded-lg border border-slate-100 bg-slate-50 text-slate-400 text-sm font-medium cursor-not-allowed">{% trans "Next" %}</span>
             {% endif %}
         </div>
     </div>
@@ -122,14 +123,14 @@
             <i class="fas fa-users text-slate-400 text-2xl"></i>
         </div>
         {% if query %}
-        <p class="text-slate-500 font-medium">Aucun patient trouvé pour « {{ query }} »</p>
+        <p class="text-slate-500 font-medium">{% blocktrans %}No patients found for "{{ query }}"{% endblocktrans %}</p>
         <a href="{% url 'patient_list' %}" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-teal-600 hover:text-teal-700">
-            <i class="fas fa-times"></i> Effacer la recherche
+            <i class="fas fa-times"></i> {% trans "Clear search" %}
         </a>
         {% else %}
-        <p class="text-slate-500 font-medium">Aucun patient enregistré</p>
+        <p class="text-slate-500 font-medium">{% trans "No patients registered" %}</p>
         <a href="{% url 'patient_create' %}" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-teal-600 hover:text-teal-700">
-            <i class="fas fa-plus"></i> Ajouter un patient
+            <i class="fas fa-plus"></i> {% trans "Add a patient" %}
         </a>
         {% endif %}
     </div>
