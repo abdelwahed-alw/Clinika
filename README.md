@@ -1,56 +1,108 @@
-# Medical Clinic Management
+# Clinika — Medical Clinic Management
 
-Django application for managing a medical clinic — patients, appointments, weekly agenda, and automatic reminders.
+![Clinika Banner](https://img.shields.io/badge/Django-6.0-092E20?style=for-the-badge&logo=django&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Python 3.14](https://img.shields.io/badge/Python-3.14-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-## Features
+Clinika is a modern, responsive Django application designed for the complete management of a medical clinic. It streamlines day-to-day operations by managing patient records, scheduling appointments, providing a weekly agenda view, and automating appointment reminders.
 
-- **Patient Management** — Add, edit, delete and search (name, CIN, phone). Complete medical record: blood group, allergies, chronic diseases.
-- **Appointment Scheduling** — Create, modify and cancel with classification (Consultation, Check-up, Control, Emergency, Follow-up). Double-booking prevention.
-- **Dashboard** — At-a-glance statistics: new patients today, today's/week's appointments, pending reminders.
-- **Weekly Agenda** — 7-day calendar view with all scheduled appointments.
-- **Smart Reminder System** — Automatic detection of appointments within 48h without follow-up, with one-click "Mark as contacted" action.
+## ✨ Features
 
-## Tech Stack
+- **🧑‍⚕️ Patient Management** 
+  - Add, edit, delete, and search patients (by name, CIN, or phone number).
+  - Maintain comprehensive medical records including blood group, allergies, and chronic diseases.
+  
+- **📅 Appointment Scheduling**
+  - Create, modify, and cancel appointments.
+  - Classify appointments by type: *Consultation, Check-up, Control, Emergency, Follow-up*.
+  - Strict double-booking prevention system.
 
-- Python 3.14 / Django 6.0
-- SQLite
-- Tailwind CSS (CDN)
-- Font Awesome 6
+- **📊 Smart Dashboard**
+  - Get an at-a-glance overview of your clinic's statistics.
+  - Track new patients today, today's appointments, and weekly appointment volume.
 
-## Quick Start
+- **🗓️ Weekly Agenda**
+  - An intuitive 7-day calendar view displaying all scheduled appointments for better time management.
 
-```bash
-git clone <repo-url>
-cd <project-directory>
-python -m venv venv && source venv/bin/activate
-pip install django
-python manage.py migrate
-python manage.py runserver
-```
+- **🔔 Smart Reminder System (Alarms)**
+  - Automatic detection of appointments within 48 hours that require a reminder call.
+  - One-click "Mark as contacted" workflow to keep track of patient communications.
 
-### Demo Data
+- **🌐 Bilingual Support (i18n)**
+  - Full support for both **English** and **French**.
+  - Seamless language switcher in the header to accommodate bilingual medical staff.
 
+## 🛠️ Tech Stack
+
+- **Backend:** Python 3.14, Django 6.0
+- **Database:** SQLite (default)
+- **Frontend:** HTML5, Tailwind CSS (via CDN)
+- **Icons:** Font Awesome 6
+- **Internationalization:** Django i18n (`gettext`)
+
+## 🚀 Quick Start
+
+1. **Clone the repository and enter the directory:**
+   ```bash
+   git clone <repo-url>
+   cd Clinika
+   ```
+
+2. **Set up a virtual environment and activate it:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   pip install django
+   ```
+
+4. **Run database migrations:**
+   ```bash
+   python manage.py migrate
+   ```
+
+5. **Start the development server:**
+   ```bash
+   python manage.py runserver
+   ```
+   Visit `http://localhost:8000` in your browser.
+
+## 🧪 Development
+
+### Generate Demo Data
+Populate your database with sample patients and appointments to test the system:
 ```bash
 python seed_data.py
 ```
 
 ### Run Tests
-
+Execute the unit test suite to ensure business logic integrity (e.g., alarm logic and double-booking prevention):
 ```bash
 python manage.py test
 ```
 
-## Project Structure
-
+### Update Translations
+If you add new translatable strings to the codebase, update the `.po` files and recompile them:
+```bash
+python manage.py makemessages -l fr
+python manage.py compilemessages
 ```
-cabinet_medical/            # Django configuration (settings, urls, wsgi, asgi)
-clinic/                     # Main application
-├── models.py               # Patient & Appointment models
-├── views.py                # CRUD views, dashboard, agenda, alarms
-├── forms.py                # ModelForms for Patient & Appointment
-├── admin.py                # Admin interface configuration
-├── urls.py                 # Route definitions
-├── tests.py                # Unit tests
-└── templates/clinic/       # HTML templates (Tailwind CSS)
-seed_data.py                # Demo data generation script
+
+## 📂 Project Structure
+
+```text
+Clinika/
+├── cabinet_medical/        # Django project configuration (settings, urls, i18n, etc.)
+├── clinic/                 # Main application module
+│   ├── models.py           # Patient & Appointment models + Manager logic
+│   ├── views.py            # CRUD operations, dashboard, agenda, alarms
+│   ├── forms.py            # ModelForms for Patient & Appointment
+│   ├── admin.py            # Django Admin interface configuration
+│   ├── urls.py             # Route definitions for the clinic app
+│   ├── tests.py            # Unit tests suite
+│   └── templates/clinic/   # HTML templates styled with Tailwind CSS
+├── locale/                 # Translation files (fr)
+├── seed_data.py            # Script to generate sample demo data
+└── manage.py               # Django management script
 ```
