@@ -1,0 +1,135 @@
+{% extends "clinic/base.html" %}
+
+{% block title %}Rendez-vous — Cabinet Médical{% endblock %}
+{% block page_title %}Rendez-vous{% endblock %}
+{% block page_subtitle %}Consultations d'aujourd'hui et rendez-vous à venir{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Aujourd'hui -->
+    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm fade-in">
+        <div class="px-6 py-5 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calendar-day text-blue-600"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Aujourd'hui</h3>
+                    <p class="text-xs text-slate-500">{{ today_appointments|length }} rendez-vous</p>
+                </div>
+            </div>
+        </div>
+
+        {% if today_appointments %}
+        <div class="p-4 space-y-3">
+            {% for rdv in today_appointments %}
+            <div class="p-4 rounded-xl border border-slate-100 hover:border-teal-200 hover:bg-teal-50/30 transition-all duration-200">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-md">
+                            {{ rdv.patient.first_name|first }}{{ rdv.patient.last_name|first }}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">{{ rdv.patient.full_name }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">
+                                <i class="far fa-clock mr-1"></i>{{ rdv.date_time|time:"H:i" }}
+                                <span class="mx-1.5">·</span>
+                                <span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-semibold">{{ rdv.type }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        {% if rdv.status == 'Planifié' %}
+                            <span class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-[10px] font-bold">Planifié</span>
+                        {% elif rdv.status == 'Terminé' %}
+                            <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-[10px] font-bold">Terminé</span>
+                        {% elif rdv.status == 'Annulé' %}
+                            <span class="px-2.5 py-1 bg-red-50 text-red-700 rounded-lg text-[10px] font-bold">Annulé</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2 ml-13">{{ rdv.reason|truncatewords:20 }}</p>
+                <div class="flex items-center gap-2 mt-3 ml-13">
+                    <a href="{% url 'appointment_edit' rdv.pk %}" class="text-xs font-semibold text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-pen mr-1"></i>Modifier
+                    </a>
+                    <span class="text-slate-300">|</span>
+                    <a href="{% url 'appointment_delete' rdv.pk %}" class="text-xs font-semibold text-red-600 hover:text-red-700">
+                        <i class="fas fa-trash mr-1"></i>Supprimer
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-12 text-center">
+            <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <i class="fas fa-check-circle text-slate-400 text-xl"></i>
+            </div>
+            <p class="text-slate-500 font-medium text-sm">Aucun rendez-vous aujourd'hui</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Prochains RDV -->
+    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm fade-in fade-in-delay-1">
+        <div class="px-6 py-5 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-violet-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-clock text-violet-600"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Prochains RDV</h3>
+                    <p class="text-xs text-slate-500">{{ upcoming_appointments|length }} rendez-vous à venir</p>
+                </div>
+            </div>
+        </div>
+
+        {% if upcoming_appointments %}
+        <div class="p-4 space-y-3">
+            {% for rdv in upcoming_appointments %}
+            <div class="p-4 rounded-xl border border-slate-100 hover:border-violet-200 hover:bg-violet-50/30 transition-all duration-200">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-violet-400 to-violet-600 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-md">
+                            {{ rdv.patient.first_name|first }}{{ rdv.patient.last_name|first }}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">{{ rdv.patient.full_name }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">
+                                <i class="far fa-calendar mr-1"></i>{{ rdv.date_time|date:"d/m/Y" }}
+                                <span class="mx-1">à</span>{{ rdv.date_time|time:"H:i" }}
+                                <span class="mx-1.5">·</span>
+                                <span class="px-2 py-0.5 bg-violet-50 text-violet-700 rounded text-[10px] font-semibold">{{ rdv.type }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">{{ rdv.reason|truncatewords:15 }}</p>
+                <div class="flex items-center gap-2 mt-3">
+                    <a href="{% url 'appointment_edit' rdv.pk %}" class="text-xs font-semibold text-blue-600 hover:text-blue-700">
+                        <i class="fas fa-pen mr-1"></i>Modifier
+                    </a>
+                    <span class="text-slate-300">|</span>
+                    <a href="{% url 'appointment_delete' rdv.pk %}" class="text-xs font-semibold text-red-600 hover:text-red-700">
+                        <i class="fas fa-trash mr-1"></i>Supprimer
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-12 text-center">
+            <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <i class="fas fa-calendar-times text-slate-400 text-xl"></i>
+            </div>
+            <p class="text-slate-500 font-medium text-sm">Aucun rendez-vous à venir</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

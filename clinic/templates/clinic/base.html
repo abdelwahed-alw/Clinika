@@ -1,0 +1,248 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cabinet Médical — Gestion complète de votre cabinet médical">
+    <title>{% block title %}Cabinet Médical{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#f0fdfa', 100:'#ccfbf1', 200:'#99f6e4', 300:'#5eead4', 400:'#2dd4bf', 500:'#14b8a6', 600:'#0d9488', 700:'#0f766e', 800:'#115e59', 900:'#134e4a' },
+                        medical: { 50:'#eff6ff', 100:'#dbeafe', 200:'#bfdbfe', 300:'#93c5fd', 400:'#60a5fa', 500:'#3b82f6', 600:'#2563eb', 700:'#1d4ed8', 800:'#1e3a5f', 900:'#0f172a' },
+                    },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+
+        /* Sidebar transition */
+        .sidebar-link {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-link:hover {
+            transform: translateX(4px);
+        }
+        .sidebar-link.active {
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(13, 148, 136, 0.3);
+        }
+
+        /* Card hover */
+        .stat-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Table row hover */
+        .table-row {
+            transition: background-color 0.15s ease;
+        }
+        .table-row:hover {
+            background-color: #f0fdfa;
+        }
+
+        /* Pulse animation for alarms */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.9); opacity: 1; }
+            80%, 100% { transform: scale(1.3); opacity: 0; }
+        }
+        .alarm-pulse::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Fade in animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeInUp 0.5s ease forwards; }
+        .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .fade-in-delay-4 { animation-delay: 0.4s; opacity: 0; }
+    </style>
+</head>
+<body class="h-full bg-slate-50">
+
+    <div class="flex h-full min-h-screen">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SIDEBAR                                     -->
+        <!-- ═══════════════════════════════════════════ -->
+        <aside class="w-72 bg-medical-900 text-white flex flex-col fixed h-full z-30 shadow-2xl">
+
+            <!-- Logo -->
+            <div class="px-6 py-6 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30">
+                        <i class="fas fa-heartbeat text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight">Cabinet Médical</h1>
+                        <p class="text-xs text-slate-400 font-medium">Système de Gestion</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+
+                <p class="px-3 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Principal</p>
+
+                <a href="{% url 'dashboard' %}"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-th-large w-5 text-center"></i>
+                    Tableau de bord
+                </a>
+
+                <a href="{% url 'patient_list' %}"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if 'patient' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-users w-5 text-center"></i>
+                    Patients
+                </a>
+
+                <p class="px-3 mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Planification</p>
+
+                <a href="{% url 'appointment_list' %}"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if 'appointment' in request.resolver_match.url_name %}active{% endif %}">
+                    <i class="fas fa-calendar-check w-5 text-center"></i>
+                    Rendez-vous
+                </a>
+
+                <a href="{% url 'weekly_agenda' %}"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if request.resolver_match.url_name == 'weekly_agenda' %}active{% endif %}">
+                    <i class="fas fa-calendar-week w-5 text-center"></i>
+                    Agenda Semaine
+                </a>
+
+                <p class="px-3 mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Système</p>
+
+                <a href="{% url 'alarm_list' %}"
+                   class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 {% if 'alarm' in request.resolver_match.url_name %}active{% endif %}">
+                    <div class="relative">
+                        <i class="fas fa-bell w-5 text-center"></i>
+                    </div>
+                    Alarmes
+                </a>
+
+            </nav>
+
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user-md text-slate-300 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-slate-200">Dr. Médecin</p>
+                        <p class="text-[11px] text-slate-500">Médecine Générale</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- MAIN CONTENT                                -->
+        <!-- ═══════════════════════════════════════════ -->
+        <main class="flex-1 ml-72">
+
+            <!-- Top Bar -->
+            <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-slate-200/60">
+                <div class="flex items-center justify-between px-8 py-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">{% block page_title %}Tableau de bord{% endblock %}</h2>
+                        <p class="text-sm text-slate-500 mt-0.5">{% block page_subtitle %}Bienvenue dans votre espace de gestion{% endblock %}</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="{% url 'patient_create' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-lg shadow-teal-500/25 hover:shadow-teal-500/40">
+                            <i class="fas fa-plus text-xs"></i>
+                            Nouveau Patient
+                        </a>
+                        <a href="{% url 'appointment_create' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-medical-500 to-medical-600 text-white rounded-xl text-sm font-semibold hover:from-medical-600 hover:to-medical-700 transition-all duration-200 shadow-lg shadow-medical-500/25 hover:shadow-medical-500/40">
+                            <i class="fas fa-calendar-plus text-xs"></i>
+                            Nouveau RDV
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Flash Messages (Toasts) -->
+            {% if messages %}
+            <div id="toast-container" class="fixed top-24 right-8 z-50 flex flex-col gap-3">
+                {% for message in messages %}
+                <div class="toast-message flex items-center justify-between gap-4 px-5 py-4 rounded-xl shadow-xl border fade-in min-w-[300px] transform transition-all duration-300
+                    {% if message.tags == 'success' %}bg-white border-emerald-200 text-emerald-800 shadow-emerald-500/10{% endif %}
+                    {% if message.tags == 'error' %}bg-white border-red-200 text-red-800 shadow-red-500/10{% endif %}
+                    {% if message.tags == 'warning' %}bg-white border-amber-200 text-amber-800 shadow-amber-500/10{% endif %}
+                    {% if message.tags == 'info' %}bg-white border-blue-200 text-blue-800 shadow-blue-500/10{% endif %}">
+                    <div class="flex items-center gap-3">
+                        {% if message.tags == 'success' %}<i class="fas fa-check-circle text-emerald-500 text-lg"></i>{% endif %}
+                        {% if message.tags == 'error' %}<i class="fas fa-exclamation-circle text-red-500 text-lg"></i>{% endif %}
+                        {% if message.tags == 'warning' %}<i class="fas fa-exclamation-triangle text-amber-500 text-lg"></i>{% endif %}
+                        {% if message.tags == 'info' %}<i class="fas fa-info-circle text-blue-500 text-lg"></i>{% endif %}
+                        <p class="text-sm font-semibold">{{ message }}</p>
+                    </div>
+                    <button onclick="this.closest('.toast-message').remove()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(() => {
+                        const toasts = document.querySelectorAll('.toast-message');
+                        toasts.forEach(toast => {
+                            toast.style.opacity = '0';
+                            toast.style.transform = 'translateX(100%)';
+                            setTimeout(() => toast.remove(), 300);
+                        });
+                    }, 5000);
+                });
+            </script>
+            {% endif %}
+
+            <!-- Page Content -->
+            <div class="p-8">
+                {% block content %}{% endblock %}
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

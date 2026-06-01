@@ -1,0 +1,150 @@
+{% extends "clinic/base.html" %}
+
+{% block title %}Tableau de bord — Cabinet Médical{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+{% block page_subtitle %}Vue d'ensemble de votre cabinet médical{% endblock %}
+
+{% block content %}
+
+<!-- Alarm Banner -->
+{% if alarm_count > 0 %}
+<div class="mb-6 fade-in">
+    <div class="flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl shadow-lg shadow-amber-500/25">
+        <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+            <i class="fas fa-bell text-white text-xl animate-bounce"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="text-white font-bold text-lg">{{ alarm_count }} alarme{{ alarm_count|pluralize }} activée{{ alarm_count|pluralize }} !</h3>
+            <p class="text-amber-100 text-sm">Des patients doivent être contactés pour un rappel de rendez-vous.</p>
+        </div>
+        <a href="{% url 'alarm_list' %}" class="px-5 py-2.5 bg-white text-amber-600 rounded-xl text-sm font-bold hover:bg-amber-50 transition-all duration-200 shadow-lg">
+            Voir les alarmes <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+    <!-- Patients aujourd'hui -->
+    <div class="stat-card bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm fade-in fade-in-delay-1">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/30">
+                <i class="fas fa-user-plus text-white text-lg"></i>
+            </div>
+            <span class="text-xs font-semibold text-teal-600 bg-teal-50 px-2.5 py-1 rounded-lg">Aujourd'hui</span>
+        </div>
+        <p class="text-3xl font-extrabold text-slate-800">{{ total_patients_today }}</p>
+        <p class="text-sm text-slate-500 mt-1 font-medium">Nouveaux patients</p>
+    </div>
+
+    <!-- RDV aujourd'hui -->
+    <div class="stat-card bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm fade-in fade-in-delay-2">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i class="fas fa-calendar-day text-white text-lg"></i>
+            </div>
+            <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">Aujourd'hui</span>
+        </div>
+        <p class="text-3xl font-extrabold text-slate-800">{{ total_appointments_today }}</p>
+        <p class="text-sm text-slate-500 mt-1 font-medium">Rendez-vous</p>
+    </div>
+
+    <!-- RDV semaine -->
+    <div class="stat-card bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm fade-in fade-in-delay-3">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-violet-400 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30">
+                <i class="fas fa-calendar-week text-white text-lg"></i>
+            </div>
+            <span class="text-xs font-semibold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-lg">Semaine</span>
+        </div>
+        <p class="text-3xl font-extrabold text-slate-800">{{ total_appointments_week }}</p>
+        <p class="text-sm text-slate-500 mt-1 font-medium">RDV cette semaine</p>
+    </div>
+
+    <!-- Alarmes -->
+    <div class="stat-card bg-white rounded-2xl p-6 border border-slate-200/60 shadow-sm fade-in fade-in-delay-4 {% if alarm_count > 0 %}ring-2 ring-red-200{% endif %}">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br {% if alarm_count > 0 %}from-red-400 to-red-600 shadow-red-500/30{% else %}from-emerald-400 to-emerald-600 shadow-emerald-500/30{% endif %} rounded-xl flex items-center justify-center shadow-lg">
+                <i class="fas fa-bell text-white text-lg {% if alarm_count > 0 %}animate-bounce{% endif %}"></i>
+            </div>
+            {% if alarm_count > 0 %}
+                <span class="text-xs font-semibold text-red-600 bg-red-50 px-2.5 py-1 rounded-lg animate-pulse">Urgent</span>
+            {% else %}
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">OK</span>
+            {% endif %}
+        </div>
+        <p class="text-3xl font-extrabold text-slate-800">{{ alarm_count }}</p>
+        <p class="text-sm text-slate-500 mt-1 font-medium">Alarmes en attente</p>
+    </div>
+
+</div>
+
+<!-- Prochains Rendez-vous -->
+<div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm fade-in">
+    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-medical-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-clock text-medical-600"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800">Prochains Rendez-vous</h3>
+        </div>
+        <a href="{% url 'appointment_list' %}" class="text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors">
+            Voir tout <i class="fas fa-arrow-right ml-1 text-xs"></i>
+        </a>
+    </div>
+
+    {% if upcoming_appointments %}
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="border-b border-slate-100">
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Patient</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Date & Heure</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Motif</th>
+                    <th class="px-6 py-3.5 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Statut</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                {% for rdv in upcoming_appointments %}
+                <tr class="table-row">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+                                {{ rdv.patient.first_name|first }}{{ rdv.patient.last_name|first }}
+                            </div>
+                            <span class="text-sm font-semibold text-slate-700">{{ rdv.patient.full_name }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-600">
+                        <i class="far fa-calendar text-slate-400 mr-1"></i>
+                        {{ rdv.date_time|date:"d/m/Y" }} à {{ rdv.date_time|time:"H:i" }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold">{{ rdv.type }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-600 max-w-xs truncate">{{ rdv.reason }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 bg-teal-50 text-teal-700 rounded-lg text-xs font-semibold">{{ rdv.status }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="px-6 py-16 text-center">
+        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-calendar-times text-slate-400 text-2xl"></i>
+        </div>
+        <p class="text-slate-500 font-medium">Aucun rendez-vous à venir</p>
+        <a href="{% url 'appointment_create' %}" class="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-teal-600 hover:text-teal-700">
+            <i class="fas fa-plus"></i> Planifier un rendez-vous
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

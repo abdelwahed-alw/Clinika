@@ -1,0 +1,139 @@
+{% extends "clinic/base.html" %}
+
+{% block title %}Patients — Cabinet Médical{% endblock %}
+{% block page_title %}Liste des Patients{% endblock %}
+{% block page_subtitle %}Gérez votre base de données patients{% endblock %}
+
+{% block content %}
+
+<!-- Search & Actions -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 fade-in">
+    <form method="get" class="flex-1 max-w-lg">
+        <div class="relative">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" name="q" value="{{ query }}"
+                   placeholder="Rechercher par nom, prénom, CIN ou téléphone..."
+                   class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all duration-200 shadow-sm">
+        </div>
+    </form>
+    <a href="{% url 'patient_create' %}" class="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-xl text-sm font-semibold hover:from-teal-600 hover:to-teal-700 transition-all duration-200 shadow-lg shadow-teal-500/25">
+        <i class="fas fa-plus text-xs"></i>
+        Nouveau Patient
+    </a>
+</div>
+
+<!-- Patients Table -->
+<div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden fade-in fade-in-delay-1">
+    {% if page_obj %}
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="bg-slate-50/80 border-b border-slate-100">
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nom Complet</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Âge</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Téléphone</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Groupe Sanguin</th>
+                    <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Ville</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+                {% for patient in page_obj %}
+                <tr class="table-row">
+                    <td class="px-6 py-4">
+                        <span class="text-xs font-mono font-bold text-slate-400">#{{ patient.id }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-md shadow-teal-500/20">
+                                {{ patient.first_name|first }}{{ patient.last_name|first }}
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-800">{{ patient.full_name }}</p>
+                                {% if patient.cin %}<p class="text-xs text-slate-400">CIN: {{ patient.cin }}</p>{% endif %}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm font-medium text-slate-700">{{ patient.age }} ans</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-sm text-slate-600">
+                            <i class="fas fa-phone text-slate-400 mr-1 text-xs"></i>
+                            {{ patient.phone }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if patient.blood_group %}
+                        <span class="px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-bold border border-red-100">
+                            <i class="fas fa-tint mr-1"></i>{{ patient.blood_group }}
+                        </span>
+                        {% else %}
+                        <span class="text-xs text-slate-400">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-600">{{ patient.city|default:"—" }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <a href="{% url 'patient_edit' patient.pk %}"
+                               class="w-9 h-9 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center transition-colors duration-200"
+                               title="Modifier">
+                                <i class="fas fa-pen text-xs"></i>
+                            </a>
+                            <a href="{% url 'patient_delete' patient.pk %}"
+                               class="w-9 h-9 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center justify-center transition-colors duration-200"
+                               title="Supprimer">
+                                <i class="fas fa-trash text-xs"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50">
+        <p class="text-sm text-slate-500">
+            Page <span class="font-medium text-slate-800">{{ page_obj.number }}</span> sur <span class="font-medium text-slate-800">{{ page_obj.paginator.num_pages }}</span>
+        </p>
+        <div class="flex gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors">Précédent</a>
+            {% else %}
+            <span class="px-3 py-1.5 rounded-lg border border-slate-100 bg-slate-50 text-slate-400 text-sm font-medium cursor-not-allowed">Précédent</span>
+            {% endif %}
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors">Suivant</a>
+            {% else %}
+            <span class="px-3 py-1.5 rounded-lg border border-slate-100 bg-slate-50 text-slate-400 text-sm font-medium cursor-not-allowed">Suivant</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="px-6 py-16 text-center">
+        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-users text-slate-400 text-2xl"></i>
+        </div>
+        {% if query %}
+        <p class="text-slate-500 font-medium">Aucun patient trouvé pour « {{ query }} »</p>
+        <a href="{% url 'patient_list' %}" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-teal-600 hover:text-teal-700">
+            <i class="fas fa-times"></i> Effacer la recherche
+        </a>
+        {% else %}
+        <p class="text-slate-500 font-medium">Aucun patient enregistré</p>
+        <a href="{% url 'patient_create' %}" class="inline-flex items-center gap-2 mt-3 text-sm font-semibold text-teal-600 hover:text-teal-700">
+            <i class="fas fa-plus"></i> Ajouter un patient
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
