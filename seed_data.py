@@ -1,6 +1,6 @@
-"""
+
 Script de peuplement de la base de données avec des données de test.
-"""
+
 import os
 import sys
 import django
